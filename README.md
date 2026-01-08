@@ -1,4 +1,16 @@
 [//]: # (SPDX-License-Identifier: CC-BY-4.0)
+# Samples for Rust
+
+This is a fork of the official samples with examples of rust implementations. You can find the ongoing development of the library [here](https://github.com/LF-Decentralized-Trust-labs/fabric-sdk-rust).
+
+What has been added:
+
+- [asset-transfer-basic-chaincode](asset-transfer-basic/chaincode-rust)
+
+What will be added:
+
+- Custom builder to handle rust projects and/or binary builds as discussed [here](https://github.com/hyperledger/fabric/issues/3649#issuecomment-3585562780)
+- Application example
 
 # Hyperledger Fabric Samples
 
@@ -36,7 +48,7 @@ transfer an asset in a more realistic transfer scenario.
 
 |  **Smart Contract** | **Description** | **Tutorial** | **Smart contract languages** | **Application languages** |
 | -----------|------------------------------|----------|---------|---------|
-| [Basic](asset-transfer-basic) | The Basic sample smart contract that allows you to create and transfer an asset by putting data on the ledger and retrieving it. This sample is recommended for new Fabric users. | [Writing your first application](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html) | Go, JavaScript, TypeScript, Java | Go, TypeScript, Java |
+| [Basic](asset-transfer-basic) | The Basic sample smart contract that allows you to create and transfer an asset by putting data on the ledger and retrieving it. This sample is recommended for new Fabric users. | [Writing your first application](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html) | Go, JavaScript, TypeScript, Java, Rust | Go, TypeScript, Java, Rust |
 | [Ledger queries](asset-transfer-ledger-queries) | The ledger queries sample demonstrates range queries and transaction updates using range queries (applicable for both LevelDB and CouchDB state databases), and how to deploy an index with your chaincode to support JSON queries (applicable for CouchDB state database only). | [Using CouchDB](https://hyperledger-fabric.readthedocs.io/en/latest/couchdb_tutorial.html) | Go, JavaScript | Java, JavaScript |
 | [Private data](asset-transfer-private-data) | This sample demonstrates the use of private data collections, how to manage private data collections with the chaincode lifecycle, and how the private data hash can be used to verify private data on the ledger. It also demonstrates how to control asset updates and transfers using client-based ownership and access control. | [Using Private Data](https://hyperledger-fabric.readthedocs.io/en/latest/private_data_tutorial.html) | Go, TypeScript, Java | TypeScript |
 | [State-Based Endorsement](asset-transfer-sbe) | This sample demonstrates how to override the chaincode-level endorsement policy to set endorsement policies at the key-level (data/asset level). | [Using State-based endorsement](https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-sbe) | Java, TypeScript | JavaScript |

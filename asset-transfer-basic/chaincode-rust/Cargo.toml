@@ -1,0 +1,17 @@
+[package]
+name = "chaincode"
+authors = ["Arne Fuchs <arnefuchs@pm.me>"]
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fabric-sdk = {git="https://github.com/LF-Decentralized-Trust-labs/fabric-sdk-rust"}
+serde = "1.0.228"
+
+[build]
+rustflags = ["-C", "target-feature=+crt-static"]
+target = "x86_64-unknown-linux-gnu"
+
+[[bin]]
+name = "chaincode"
+path = "src/main.rs"
