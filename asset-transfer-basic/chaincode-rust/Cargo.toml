@@ -5,7 +5,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-fabric-sdk = {git="https://github.com/LF-Decentralized-Trust-labs/fabric-sdk-rust"}
+fabric-sdk = {version="0.2.0"}
 serde = "1.0.228"
 
 [build]

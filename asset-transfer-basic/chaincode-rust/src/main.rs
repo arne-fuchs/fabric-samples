@@ -1,4 +1,4 @@
-use fabric_sdk::chaincode_derives::functions;
+use fabric_sdk::prelude::*;
 
 fn main() {
     fabric_sdk::chaincode::initialize()
@@ -18,9 +18,9 @@ fn main() {
 }
 
 pub mod asset {
-    use std::str::FromStr;
 
-    use fabric_sdk::{chaincode::context::Context, serde_json::{self, json}, tokio};
+    use fabric_sdk::prelude::*;
+    use std::str::FromStr;
     use serde::{Deserialize, Serialize};
 
     #[derive(Debug, Serialize, Deserialize)]
@@ -43,7 +43,7 @@ pub mod asset {
      * `appraised_value` the appraisedValue of the new asset
      * `return Asset` the created asset
      */
-    #[fabric_sdk::transaction]
+    #[transaction]
     pub async fn create_asset(
         ctx: Context,
         asset_id: String,
@@ -77,7 +77,7 @@ pub mod asset {
      * `assetID` the ID of the asset
      * `return Asset` the asset found on the ledger if there was one
      */
-    #[fabric_sdk::transaction]
+    #[transaction]
     pub async fn read_asset(ctx: Context, asset_id: String) -> Asset {
         serde_json::from_str(ctx.get_state_string(asset_id.as_str()).await.as_str())
             .expect("Invalid or no asset")
@@ -94,7 +94,7 @@ pub mod asset {
      * `appraisedValue` the appraisedValue of the asset being updated
      * `return` the transferred asset
      */
-    #[fabric_sdk::transaction]
+    #[transaction]
     pub async fn update_asset(
         ctx: Context,
         asset_id: String,
@@ -127,7 +127,7 @@ pub mod asset {
      * `ctx` the transaction context
      * `assetID` the ID of the asset being deleted
      */
-     #[fabric_sdk::transaction]
+     #[transaction]
      pub async fn delete_asset(ctx: Context, asset_id: String) {
          if !asset_exists(ctx.clone(), asset_id.clone()).await {
              let error = format!("Asset {asset_id} does not exists");
@@ -144,7 +144,7 @@ pub mod asset {
      * `assetID` the ID of the asset
      * `return boolean` indicating the existence of the asset
      */
-    #[fabric_sdk::transaction]
+    #[transaction]
     pub async fn asset_exists(ctx: Context, asset_id: String) -> bool {
         !ctx.get_state(&asset_id).await.is_empty()
     }
@@ -157,7 +157,7 @@ pub mod asset {
      * `newOwner` the new owner
      * `return` the old owner
      */
-     #[fabric_sdk::transaction]
+     #[transaction]
      pub async fn transfer_asset(ctx: Context, asset_id: String, new_owner: String) -> String {
          let asset = ctx.get_state_string(&asset_id).await;
          if asset.is_empty() {
@@ -176,10 +176,10 @@ pub mod asset {
       * `ctx` the transaction context
       * `return` array of assets found on the ledger
       */
-      #[fabric_sdk::transaction]
+      #[transaction]
       pub async fn get_all_assets(ctx: Context) -> String{
           let asset_list = ctx.get_state_by_range("", "").await;
-          let mut json = json!([]);
+          let mut json = serde_json::json!([]);
           for asset in asset_list {
               json.as_array_mut().expect("Expected array")
                   .push(
