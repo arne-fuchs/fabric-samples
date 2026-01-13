@@ -297,9 +297,9 @@ dependencies = [
 
 [[package]]
 name = "fabric-sdk"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1079f4a66b9b011dbf81467a5e43bd78ddf4b8bd7f2a9e73e7b1e10011df5d0a"
+checksum = "0692052fd62dc70f0a5dbae5827bdc314dcb624a53f0ab18a0ee6cf58fa23884"
 dependencies = [
  "ecdsa",
  "fabric-sdk-derives",

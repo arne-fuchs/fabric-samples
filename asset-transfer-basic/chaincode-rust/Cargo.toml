@@ -5,12 +5,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-fabric-sdk = {version="0.2.0"}
+fabric-sdk = "0.2.1"
 serde = "1.0.228"
-
-[build]
-rustflags = ["-C", "target-feature=+crt-static"]
-target = "x86_64-unknown-linux-gnu"
 
 [[bin]]
 name = "chaincode"
