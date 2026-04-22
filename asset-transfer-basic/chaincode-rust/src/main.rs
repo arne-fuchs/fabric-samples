@@ -3,7 +3,7 @@ use fabric_sdk::prelude::*;
 fn main() {
     fabric_sdk::chaincode::initialize()
         .register(
-            "basic",
+            "",
             functions![
                 asset::create_asset,
                 asset::asset_exists,
@@ -20,8 +20,8 @@ fn main() {
 pub mod asset {
 
     use fabric_sdk::prelude::*;
-    use std::str::FromStr;
     use serde::{Deserialize, Serialize};
+    use std::str::FromStr;
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Asset {
@@ -105,8 +105,8 @@ pub mod asset {
     ) -> Asset {
         if !asset_exists(ctx.clone(), asset_id.clone()).await {
             let error = format!("Asset {asset_id} does not exists");
-            println!("{}",error);
-            panic!("{}",error);
+            println!("{}", error);
+            panic!("{}", error);
         }
         put_asset(
             &ctx,
@@ -127,15 +127,15 @@ pub mod asset {
      * `ctx` the transaction context
      * `assetID` the ID of the asset being deleted
      */
-     #[transaction]
-     pub async fn delete_asset(ctx: Context, asset_id: String) {
-         if !asset_exists(ctx.clone(), asset_id.clone()).await {
-             let error = format!("Asset {asset_id} does not exists");
-             println!("{}",error);
-             panic!("{}",error);
-         }
-         ctx.del_state(asset_id.as_str()).await;
-     }
+    #[transaction]
+    pub async fn delete_asset(ctx: Context, asset_id: String) {
+        if !asset_exists(ctx.clone(), asset_id.clone()).await {
+            let error = format!("Asset {asset_id} does not exists");
+            println!("{}", error);
+            panic!("{}", error);
+        }
+        ctx.del_state(asset_id.as_str()).await;
+    }
 
     /**
      * Checks the existence of the asset on the ledger
@@ -157,39 +157,51 @@ pub mod asset {
      * `newOwner` the new owner
      * `return` the old owner
      */
-     #[transaction]
-     pub async fn transfer_asset(ctx: Context, asset_id: String, new_owner: String) -> String {
-         let asset = ctx.get_state_string(&asset_id).await;
-         if asset.is_empty() {
-             let error = format!("Asset {asset_id} does not exists");
-             println!("{}",error);
-             panic!("{}",error);
-         }
-         let asset: Asset = serde_json::from_str(&asset).expect("Invalid Asset");
-         put_asset(&ctx, Asset { asset_id, color: asset.color, size: asset.size, owner: new_owner.clone(), appraised_value: asset.appraised_value }).await;
-         new_owner
-     }
+    #[transaction]
+    pub async fn transfer_asset(ctx: Context, asset_id: String, new_owner: String) -> String {
+        let asset = ctx.get_state_string(&asset_id).await;
+        if asset.is_empty() {
+            let error = format!("Asset {asset_id} does not exists");
+            println!("{}", error);
+            panic!("{}", error);
+        }
+        let asset: Asset = serde_json::from_str(&asset).expect("Invalid Asset");
+        put_asset(
+            &ctx,
+            Asset {
+                asset_id,
+                color: asset.color,
+                size: asset.size,
+                owner: new_owner.clone(),
+                appraised_value: asset.appraised_value,
+            },
+        )
+        .await;
+        new_owner
+    }
 
-     /**
-      * Retrieves all assets from the ledger.
-      *
-      * `ctx` the transaction context
-      * `return` array of assets found on the ledger
-      */
-      #[transaction]
-      pub async fn get_all_assets(ctx: Context) -> String{
-          let asset_list = ctx.get_state_by_range("", "").await;
-          let mut json = serde_json::json!([]);
-          for asset in asset_list {
-              json.as_array_mut().expect("Expected array")
-                  .push(
-                      serde_json::Value::from_str(
-                          String::from_utf8(asset).expect("Invalid UTF-8 encoding").as_str()
-                      ).expect("Invalid value")
-                  );
-          }
-          json.to_string()
-      }
+    /**
+     * Retrieves all assets from the ledger.
+     *
+     * `ctx` the transaction context
+     * `return` array of assets found on the ledger
+     */
+    #[transaction]
+    pub async fn get_all_assets(ctx: Context) -> String {
+        let asset_list = ctx.get_state_by_range("", "").await;
+        let mut json = serde_json::json!([]);
+        for asset in asset_list {
+            json.as_array_mut().expect("Expected array").push(
+                serde_json::Value::from_str(
+                    String::from_utf8(asset)
+                        .expect("Invalid UTF-8 encoding")
+                        .as_str(),
+                )
+                .expect("Invalid value"),
+            );
+        }
+        json.to_string()
+    }
 
     async fn put_asset(ctx: &Context, asset: Asset) -> Asset {
         let storted_json = serde_json::to_string(&asset).expect("Couldn't serialize asset");
