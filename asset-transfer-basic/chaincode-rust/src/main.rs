@@ -3,7 +3,7 @@ use fabric_sdk::prelude::*;
 fn main() {
     fabric_sdk::chaincode::initialize()
         .register(
-            "basic",
+            "",
             functions![
                 asset::create_asset,
                 asset::asset_exists,
@@ -21,6 +21,7 @@ pub mod asset {
 
     use fabric_sdk::prelude::*;
     use serde::{Deserialize, Serialize};
+    use std::str::FromStr;
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Asset {
