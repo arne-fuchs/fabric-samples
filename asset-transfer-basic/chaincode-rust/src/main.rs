@@ -21,7 +21,6 @@ pub mod asset {
 
     use fabric_sdk::prelude::*;
     use serde::{Deserialize, Serialize};
-    use std::str::FromStr;
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Asset {
